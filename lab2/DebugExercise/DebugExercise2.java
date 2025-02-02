@@ -13,7 +13,7 @@ public class DebugExercise2 {
         int z = ~(b - a) >> 31;
 
         int max = b & w | a & z;
-        return max;
+        return a + b - max;
     }
 
 
@@ -58,7 +58,7 @@ public class DebugExercise2 {
         int i = 0;
         int sum = 0;
         while (i < x.length) {
-            sum = sum + add(sum, x[i]);
+            sum = sum + add(0, x[i]);
             i = i + 1;
         }
         return sum;
