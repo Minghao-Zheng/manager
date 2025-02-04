@@ -113,12 +113,59 @@ public class Model extends Observable {
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+        board.setViewingPerspective(side);
+        int Max4 = board.size();
+        int c;
+        for(c = 0; c < Max4; c++)
+            changed = tiltcol(c) || changed;
+        board.setViewingPerspective(Side.NORTH);
 
         checkGameOver();
         if (changed) {
             setChanged();
         }
         return changed;
+    }
+
+    /** Do the same thing as tilt(Side side), but in a single column!    */
+    private boolean tiltcol(int col) {
+        int Maxrow = board.size() - 1;
+        int r;
+        int row;
+        boolean state = false;
+        //  A variable that record if the tile has been merged.
+        int[][] hasmerged = new int[board.size()][board.size()];
+        for(r = Maxrow - 1; r >= 0; r--) {
+            Tile t = board.tile(col, r);
+            if(t == null)
+                continue;
+            row = teststate(col, r, hasmerged);
+            if(board.move(col, row, t)) {
+                score += board.tile(col, row).value();
+                hasmerged[row][col] = 1;
+            }
+            state = (r != row) || state;
+        }
+        return state;
+    }
+    /** 1. Test the state of the upper rows, return the highest place the tilt(col, r)
+     *  can be moved to.
+     *  2. Figure out if we can increase our score.
+     */
+    private int teststate(int c, int row, int[][] merged) {
+        int Maxrow2 = board.size() - 1;
+        int k;
+        int h = row;
+        for(k = row + 1; k <= Maxrow2; k++) {
+            Tile t = board.tile(c, row);
+            if(board.tile(c, k) == null)
+                h = k;
+            else if(board.tile(c, k).value() == t.value() && merged[k][c] == 0)
+                return k;
+            else
+                return h;
+        }
+        return h;
     }
 
     /** Checks if the game is over and sets the gameOver variable
@@ -137,7 +184,14 @@ public class Model extends Observable {
      *  Empty spaces are stored as null.
      * */
     public static boolean emptySpaceExists(Board b) {
-        // TODO: Fill in this function.
+        int Max1 = b.size();
+        int i, j;
+        for(i = 0; i < Max1; i++) {
+            for(j = 0; j < Max1; j++) {
+                if(b.tile(i, j) == null)
+                    return true;
+            }
+        }
         return false;
     }
 
@@ -147,7 +201,15 @@ public class Model extends Observable {
      * given a Tile object t, we get its value with t.value().
      */
     public static boolean maxTileExists(Board b) {
-        // TODO: Fill in this function.
+        int Max2 = b.size();
+        int i, j;
+        for(i = 0; i < Max2; i++) {
+            for(j = 0; j < Max2; j++) {
+                Tile t = b.tile(i, j);
+                if(t != null && t.value() == MAX_PIECE)
+                    return true;
+            }
+        }
         return false;
     }
 
@@ -158,7 +220,22 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        // TODO: Fill in this function.
+        if(emptySpaceExists(b))
+            return true;
+        int Max3 = b.size();
+        int csml, clrg, rsml, rlrg, col, row;
+        for(col = 0; col < Max3; col++) {
+            for(rsml = 0, rlrg = 1; rlrg < Max3; rsml++, rlrg++) {
+                if(b.tile(col, rsml).value() == b.tile(col, rlrg).value())
+                    return true;
+            }
+        }
+        for(row = 0; row < Max3; row++) {
+            for(csml = 0, clrg = 1; clrg < Max3; csml++, clrg++) {
+                if(b.tile(csml, row).value() == b.tile(clrg, row).value())
+                    return true;
+            }
+        }
         return false;
     }
 
