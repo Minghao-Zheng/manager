@@ -26,7 +26,10 @@ public class LinkedListDeque<T> implements Iterable<T>{
     private SubNode<T> sentinel;
     private int size;
 
-    /** Returns a iterator into ME. */
+    /** Create a iterator into ME.
+     *
+     * @return  The iterator from the interface.
+     */
     public Iterator<T> iterator() {
         return new LinkedListDequeIterator();
     }
@@ -40,7 +43,7 @@ public class LinkedListDeque<T> implements Iterable<T>{
             node = sentinel.next;
         }
         public boolean hasNext() {
-            return (node.next != sentinel);
+            return (node != sentinel);
         }
         public T next() {
             T returnItem = node.content;
@@ -94,15 +97,14 @@ public class LinkedListDeque<T> implements Iterable<T>{
      *  If no such item exists, returns null.
      */
     public T removeFirst() {
-        size -= 1;
-        SubNode<T> f = sentinel.next;
-        if (f == sentinel) {
+        if (this.isEmpty()) {
             return null;
         }
+        size -= 1;
+        SubNode<T> f = sentinel.next;
         T item = f.content;
         sentinel.next = f.next;
         f.next.pre = sentinel;
-        f = null;
         return item;
     }
 
@@ -110,15 +112,14 @@ public class LinkedListDeque<T> implements Iterable<T>{
      *  If no such item exists, returns null.
      */
     public T removeLast() {
-        size -= 1;
-        SubNode<T> f = sentinel.pre;
-        if (f == sentinel) {
+        if (this.isEmpty()) {
             return null;
         }
+        size -= 1;
+        SubNode<T> f = sentinel.pre;
         T item = f.content;
         sentinel.pre = f.pre;
         f.pre.next = sentinel;
-        f = null;
         return item;
     }
 
@@ -126,12 +127,8 @@ public class LinkedListDeque<T> implements Iterable<T>{
      *  Once all the items have been printed, print out a new line.
      */
     public void printDeque() {
-        SubNode<T> node;
-        for (node = sentinel.next ; node.next != sentinel; node = node.next) {
-            System.out.print(node.content + " ");
-        }
-        if (node != sentinel) {
-            System.out.print(node.content);
+        for (T x : this) {
+            System.out.print(x + " ");
         }
         System.out.println();
     }

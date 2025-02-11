@@ -1,0 +1,193 @@
+package deque;
+
+import java.util.Iterator;
+
+public class ArrayDeque<T> implements Iterable<T>{
+    private T[] content;
+    private int size;
+    private int capacity;
+    private int nextFirst;
+    private int nextLast;
+
+    /** Create a iterator into ME.
+     *
+     * @return  The iterator from the interface.
+     */
+    public Iterator<T> iterator() {
+        return new ArrayDequeIterator();
+    }
+
+    /** My own iterator.
+     *  When iterator() is called, what is actually called is my own iterator.
+     */
+    private class ArrayDequeIterator implements Iterator<T> {
+        private int wizPos;
+        public ArrayDequeIterator() {
+            wizPos = (nextFirst + 1) % capacity;
+        }
+        public boolean hasNext() {
+            return (wizPos != nextLast);
+        }
+        public T next() {
+            T item = content[wizPos];
+            wizPos = (wizPos + 1) % capacity;
+            return item;
+        }
+    }
+    /** Create a ArrayDeque.    */
+    public ArrayDeque() {
+        capacity = 8;
+        size = 0;
+        content = (T[]) new Object[8];
+        nextFirst = 3;
+        nextLast = 4;
+    }
+    /** Most tricky part: resize the array. */
+    private void resize() {
+        if (size == capacity) {
+            int newCapacity = capacity * 2;
+            T[] newArray = (T[]) new Object[newCapacity];
+            System.arraycopy(content, 0, newArray, 0, nextFirst);
+            System.arraycopy(content, nextLast, newArray, nextLast + capacity, capacity - nextLast);
+            nextLast = nextFirst + 1;
+            nextFirst = nextLast + capacity - 1;
+            capacity = newCapacity;
+            content = newArray;
+        } else {
+            int newCapacity = capacity / 2;
+            T[] newArray = (T[]) new Object[newCapacity];
+            for (int i = 0; i < capacity; i += 1) {
+                if (content[i] != null) {
+                    int newIndex = i % newCapacity;
+                    newArray[newIndex] = content[i];
+                }
+            }
+            nextFirst = nextFirst % newCapacity;
+            nextLast = nextLast % newCapacity;
+            capacity = newCapacity;
+            content = newArray;
+        }
+    }
+
+    /** Add first item and make nextFirst increase.
+     *
+     * @param item The content of the new element.
+     */
+    public void addFirst(T item) {
+        //  before the addition.
+        if (size == capacity) {
+            resize();
+        }
+        size += 1;
+        content[nextFirst] = item;
+        nextFirst = (nextFirst + capacity - 1) % capacity;
+    }
+
+    /** Add last item and make nextLast decrease.
+     *
+     * @param item The content of the new element.
+     */
+    public void addLast(T item) {
+        //  before the addition.
+        if (size == capacity) {
+            resize();
+        }
+        size += 1;
+        content[nextLast] = item;
+        nextLast = (nextLast + 1) % capacity;
+    }
+
+    /** Check if the deque is empty.
+     *
+     * @return  True if the deque is empty and False if not.
+     * */
+    public boolean isEmpty() {
+        return (size == 0);
+    }
+
+    /** Returns the number of items in the deque.   */
+    public int size() {
+        return size;
+    }
+
+    /** Prints item in the deque from first to last, separated by space.
+     *  Once all the items have been printed, print out a new line.
+     */
+    public void printDeque() {
+        for (T x : this) {
+            System.out.print(x + " ");
+        }
+        System.out.println();
+    }
+
+    /** Removes and returns the item at the front of the deque.
+     *  If no such item exists, returns null.
+     */
+    public T removeFirst() {
+        if (this.isEmpty()) {
+            return null;
+        }
+        size -= 1;
+        //  before the removal action.
+        if (capacity >= 16 && size * 4 < capacity) {
+            resize();
+        }
+        nextFirst = (nextFirst + 1) % capacity;
+        T item = content[nextFirst];
+        content[nextFirst] = null;
+        return item;
+    }
+
+    /** Removes and returns the item at the back of the deque.
+     *  If no such item exists, returns null.
+     */
+    public T removeLast() {
+        if (this.isEmpty()) {
+            return null;
+        }
+        size -= 1;
+        //  before the removal action.
+        if (capacity >= 16 && size * 4 < capacity) {
+            resize();
+        }
+        nextLast = (nextLast + capacity - 1) % capacity;
+        T item = content[nextLast];
+        content[nextLast] = null;
+        return item;
+    }
+
+    /** Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth.
+     *  If no such item exists, returns null.
+     *
+     * @param index
+     * @return  The item at the given index.
+     */
+    public T get(int index) {
+        int trueIndex = (nextFirst + 1 + index) % capacity;
+        return content[trueIndex];
+    }
+
+    /** Returns whether or not the parameter o is equal to the Deque.
+     *  o is considered equal if it is a Deque and if it contains the same contents in the same order.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof ArrayDeque) {
+            ArrayDeque<T> oList = (ArrayDeque<T>) o;
+            //  check lists are of the same size.
+            if (oList.size != this.size) {
+                return false;
+            }
+            // check that all of MY items are in the other list and have the same sequence.
+            for (int i = 0; i < this.size; i += 1) {
+                if(this.get(i) != oList.get(i)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        //  o is not an ArrayDeque.
+        return false;
+    }
+}
