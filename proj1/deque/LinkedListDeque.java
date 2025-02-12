@@ -191,7 +191,7 @@ public class LinkedListDeque<T> implements Iterable<T>{
             }
             // check that all of MY items are in the other list and have the same sequence.
             for (T x : this) {
-                if (node.content != x) {
+                if (!x.equals(node.content)) {
                     return false;
                 }
                 node = node.next;

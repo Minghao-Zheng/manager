@@ -180,7 +180,7 @@ public class ArrayDeque<T> implements Iterable<T>{
             }
             // check that all of MY items are in the other list and have the same sequence.
             for (int i = 0; i < this.size; i += 1) {
-                if(this.get(i) != oList.get(i)) {
+                if(!this.get(i).equals(get(i))) {
                     return false;
                 }
             }
