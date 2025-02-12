@@ -152,4 +152,18 @@ public class LinkedListDequeTest {
         lld2.removeFirst();
         assertFalse("Now the two lists shouldn't be equal", lld1.equals(lld2));
     }
+
+    @Test
+    /** Check if equals(Object o) is correct.   */
+    public void advancedEqualsTest() {
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<>();
+        LinkedListDeque<Double> lld2 = new LinkedListDeque<>();
+        for (int i = 0; i < 1000; i++) {
+            lld1.addLast(i);
+        }
+        for (double i = 0; i < 1000; i++) {
+            lld2.addLast(i);
+        }
+        assertFalse("Two LinkedListDeque shouldn't be equal.", lld1.equals(lld2));
+    }
 }

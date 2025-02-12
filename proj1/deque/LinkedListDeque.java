@@ -194,14 +194,14 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
             }
             // check that all of MY items are in the other list and have the same sequence.
             for (int i = 0; i < this.size(); i += 1) {
-                if (!this.get(i).equals(get(i))) {
+                if (!this.get(i).equals(oList.get(i))) {
                     return false;
                 }
             }
 
             return true;
         }
-        // o is not a LinkedListDeque.
+        // o is not a Deque.
         return false;
     }
 }
