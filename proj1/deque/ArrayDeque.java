@@ -180,14 +180,14 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
      */
     @Override
     public boolean equals(Object o) {
-        if (o instanceof ArrayDeque) {
-            ArrayDeque<T> oList = (ArrayDeque<T>) o;
+        if (o instanceof Deque) {
+            Deque<T> oList = (Deque<T>) o;
             //  check lists are of the same size.
-            if (oList.size != this.size) {
+            if (oList.size() != this.size()) {
                 return false;
             }
             // check that all of MY items are in the other list and have the same sequence.
-            for (int i = 0; i < this.size; i += 1) {
+            for (int i = 0; i < this.size(); i += 1) {
                 if (!this.get(i).equals(get(i))) {
                     return false;
                 }
