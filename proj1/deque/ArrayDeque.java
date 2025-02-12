@@ -47,8 +47,8 @@ public class ArrayDeque<T> implements Iterable<T>{
         if (size == capacity) {
             int newCapacity = capacity * 2;
             T[] newArray = (T[]) new Object[newCapacity];
-            System.arraycopy(content, 0, newArray, 0, nextFirst);
-            System.arraycopy(content, nextLast, newArray, nextLast + capacity, capacity - nextLast);
+            System.arraycopy(content, 0, newArray, 0, nextFirst + 1);
+            System.arraycopy(content, nextLast, newArray, nextLast + capacity, (capacity - nextLast) % capacity);
             nextLast = nextFirst + 1;
             nextFirst = nextLast + capacity - 1;
             capacity = newCapacity;
@@ -163,6 +163,9 @@ public class ArrayDeque<T> implements Iterable<T>{
      * @return  The item at the given index.
      */
     public T get(int index) {
+        if (index >= capacity) {
+            return null;
+        }
         int trueIndex = (nextFirst + 1 + index) % capacity;
         return content[trueIndex];
     }
@@ -190,4 +193,5 @@ public class ArrayDeque<T> implements Iterable<T>{
         //  o is not an ArrayDeque.
         return false;
     }
+
 }
