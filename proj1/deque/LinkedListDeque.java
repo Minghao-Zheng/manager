@@ -6,9 +6,9 @@ import java.util.Iterator;
 public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
     /** A naked linked list inside our DLList. */
     private static class SubNode<T> {
-        public T content;
-        public SubNode<T> next;
-        public SubNode<T> pre;
+        private T content;
+        private SubNode<T> next;
+        private SubNode<T> pre;
 
         /** Create a SubNode.
          *
@@ -16,7 +16,7 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
          * @param p The present node of SubNode.
          * @param n The next node of SubNode.
          */
-        public SubNode(T c, SubNode<T> p, SubNode<T> n) {
+        SubNode(T c, SubNode<T> p, SubNode<T> n) {
             content = c;
             next = n;
             pre = p;
@@ -40,7 +40,7 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
      */
     private class LinkedListDequeIterator implements Iterator<T> {
         private SubNode<T> node;
-        public LinkedListDequeIterator() {
+        LinkedListDequeIterator() {
             node = sentinel.next;
         }
         @Override
@@ -134,7 +134,8 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
         System.out.println();
     }
 
-    /** Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth.
+    /** Gets the item at the given index,
+     *  where 0 is the front, 1 is the next item, and so forth.
      *  If no such item exists, returns null.
      *
      * @param index
@@ -180,7 +181,8 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
     }
 
     /** Returns whether or not the parameter o is equal to the Deque.
-     *  o is considered equal if it is a Deque and if it contains the same contents in the same order.
+     *  o is considered equal if it is a Deque,
+     *  and if it contains the same contents in the same order.
      */
     @Override
     public boolean equals(Object o) {

@@ -23,7 +23,7 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
      */
     private class ArrayDequeIterator implements Iterator<T> {
         private int wizPos;
-        public ArrayDequeIterator() {
+        ArrayDequeIterator() {
             wizPos = (nextFirst + 1) % capacity;
         }
         @Override
@@ -51,7 +51,8 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
             int newCapacity = capacity * 2;
             T[] newArray = (T[]) new Object[newCapacity];
             System.arraycopy(content, 0, newArray, 0, nextFirst + 1);
-            System.arraycopy(content, nextLast, newArray, nextLast + capacity, (capacity - nextLast) % capacity);
+            System.arraycopy(content, nextLast, newArray,
+                    nextLast + capacity, (capacity - nextLast) % capacity);
             nextLast = nextFirst + 1;
             nextFirst = nextLast + capacity - 1;
             capacity = newCapacity;
@@ -157,7 +158,8 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         return item;
     }
 
-    /** Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth.
+    /** Gets the item at the given index,
+     *  where 0 is the front, 1 is the next item, and so forth.
      *  If no such item exists, returns null.
      *
      * @param index
@@ -172,8 +174,9 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         return content[trueIndex];
     }
 
-    /** Returns whether or not the parameter o is equal to the Deque.
-     *  o is considered equal if it is a Deque and if it contains the same contents in the same order.
+    /** Returns whether the parameter o is equal to the Deque.
+     *  o is considered equal if it is a Deque,
+     *  and if it contains the same contents in the same order.
      */
     @Override
     public boolean equals(Object o) {
@@ -185,7 +188,7 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
             }
             // check that all of MY items are in the other list and have the same sequence.
             for (int i = 0; i < this.size; i += 1) {
-                if(!this.get(i).equals(get(i))) {
+                if (!this.get(i).equals(get(i))) {
                     return false;
                 }
             }
